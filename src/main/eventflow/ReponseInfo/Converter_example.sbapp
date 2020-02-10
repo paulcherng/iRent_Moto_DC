@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="ReponseInfo.Converter_example"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <implements module-reference="ReponseInfo.SchemaControl"/>
+        <import from="ReponseInfo.SchemaControl"/>
+        <parameter-definitions>
+            <parameter default="SrcID" name="SrcID"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <stream name="RawDataIn">
+            <schema>
+                <field name="UUID" type="string"/>
+                <field name="para" type="string"/>
+            </schema>
+        </stream>
+        <box name="Java" type="java">
+            <input port="1" stream="RawDataIn"/>
+            <output port="1" stream="out:Java_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.operator.jsontuple.JSON2Tuple"/>
+            <param name="enableLooseParsing" value="false"/>
+            <param name="enablePassThroughFields" value="true"/>
+            <param name="enableStatusPort" value="false"/>
+            <param name="jsonFieldName" value="para"/>
+            <param name="logLevel" value="INFO"/>
+            <param name="outputSchema" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;schema&gt;&#13;&#10;    &lt;field name=&quot;CID&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field name=&quot;OBDStatus&quot; type=&quot;int&quot;/&gt;&#13;&#10;    &lt;field name=&quot;GPSStatus&quot; type=&quot;int&quot;/&gt;&#13;&#10;    &lt;field name=&quot;GPRSStatus&quot; type=&quot;int&quot;/&gt;&#13;&#10;    &lt;field name=&quot;AccON&quot; type=&quot;int&quot;/&gt;&#13;&#10;    &lt;field name=&quot;PowON&quot; type=&quot;int&quot;/&gt;&#13;&#10;    &lt;field name=&quot;SPEED&quot; type=&quot;double&quot;/&gt;&#13;&#10;    &lt;field name=&quot;Milage&quot; type=&quot;double&quot;/&gt;&#13;&#10;    &lt;field name=&quot;Volt&quot; type=&quot;double&quot;/&gt;&#13;&#10;    &lt;field name=&quot;Lat&quot; type=&quot;double&quot;/&gt;&#13;&#10;    &lt;field name=&quot;Lng&quot; type=&quot;double&quot;/&gt;&#13;&#10;    &lt;field name=&quot;doorStatus&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field name=&quot;lockStatus&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field name=&quot;OrderStatus&quot; type=&quot;int&quot;/&gt;&#13;&#10;    &lt;field name=&quot;indoorLight&quot; type=&quot;int&quot;/&gt;&#13;&#10;    &lt;field name=&quot;SecurityStatus&quot; type=&quot;int&quot;/&gt;&#13;&#10;    &lt;field name=&quot;CentralLock&quot; type=&quot;int&quot;/&gt;&#13;&#10;    &lt;field name=&quot;GPSTime&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field name=&quot;iButton&quot; type=&quot;int&quot;/&gt;&#13;&#10;    &lt;field name=&quot;iButtonKey&quot; type=&quot;string&quot;/&gt;&#13;&#10;&lt;/schema&gt;&#13;&#10;"/>
+            <param name="passThroughFieldsFieldName" value="PassThroughFields"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+        </box>
+        <box name="Map" type="map">
+            <input port="1" stream="out:Java_1"/>
+            <output port="1" stream="ConvertedDataOut"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="PassThroughFields"/>
+                </item>
+                <expressions>
+                    <include field="UUID">PassThroughFields.UUID</include>
+                    <include field="SrcID">"${SrcID}"</include>
+                    <include field="SnsrType">""</include>
+                    <include field="SnsrID">""</include>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="ConvertedDataOut" schema="convertedData"/>
+    </add>
+</modify>

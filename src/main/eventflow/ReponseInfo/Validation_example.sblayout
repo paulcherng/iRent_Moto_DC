@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="ConvertedDataIn">
+        <param name="gui:x" value="-188"/>
+        <param name="gui:y" value="-92"/>
+    </component>
+    <component name="LoadRuleCommandIn">
+        <param name="gui:x" value="-188"/>
+        <param name="gui:y" value="-319"/>
+    </component>
+    <component name="JDBCTable">
+        <param name="gui:x" value="6"/>
+        <param name="gui:y" value="-186"/>
+        <param name="gui:width" value="80"/>
+        <param name="gui:height" value="56"/>
+    </component>
+    <component name="Filter">
+        <param name="gui:x" value="16"/>
+        <param name="gui:y" value="-92"/>
+    </component>
+    <component name="Map">
+        <param name="gui:x" value="-64"/>
+        <param name="gui:y" value="-92"/>
+    </component>
+    <component name="Map2">
+        <param name="gui:x" value="96"/>
+        <param name="gui:y" value="-92"/>
+    </component>
+    <component name="Map3">
+        <param name="gui:x" value="-64"/>
+        <param name="gui:y" value="-319"/>
+    </component>
+    <component name="Map4">
+        <param name="gui:x" value="96"/>
+        <param name="gui:y" value="-319"/>
+    </component>
+    <component name="Query">
+        <param name="gui:x" value="16"/>
+        <param name="gui:y" value="-319"/>
+    </component>
+    <component name="RuleListOut">
+        <param name="gui:x" value="198"/>
+        <param name="gui:y" value="-319"/>
+    </component>
+    <component name="ValidatedDataOut">
+        <param name="gui:x" value="198"/>
+        <param name="gui:y" value="-92"/>
+    </component>
+</application-layout>
