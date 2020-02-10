@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="Upd_Sta.Converter_example"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <implements module-reference="Upd_Sta.SchemaControl"/>
+        <import from="Upd_Sta.SchemaControl"/>
+        <parameter-definitions>
+            <parameter default="SrcID" name="SrcID"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <stream name="RawDataIn">
+            <schema>
+                <field name="UUID" type="string"/>
+                <field name="Station" type="string"/>
+                <field name="Addr" type="string"/>
+                <field name="lon" type="double"/>
+                <field name="lat" type="double"/>
+                <field name="TotalCnt" type="string"/>
+                <field name="FullCnt" type="string"/>
+                <field name="EmptyCnt" type="string"/>
+                <field name="UpdateTime" type="string"/>
+                <field name="CheckKey" type="string"/>
+            </schema>
+        </stream>
+        <box name="Map" type="map">
+            <input port="1" stream="RawDataIn"/>
+            <output port="1" stream="ConvertedDataOut"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <replace field="UpdateTime">parse_time(UpdateTime,"yyyyMMddHHmmss")</replace>
+                </item>
+                <expressions>
+                    <include field="SrcID">"${SrcID}"</include>
+                    <include field="SnsrType">""</include>
+                    <include field="SnsrID">""</include>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="ConvertedDataOut" schema="convertedData"/>
+    </add>
+</modify>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="Module">
+        <param name="gui:x" value="-49"/>
+        <param name="gui:y" value="-47"/>
+    </component>
+    <component name="Module2">
+        <param name="gui:x" value="-48"/>
+        <param name="gui:y" value="78"/>
+    </component>
+</application-layout>

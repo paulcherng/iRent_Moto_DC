@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="RawDataIn">
+        <param name="gui:x" value="-356"/>
+        <param name="gui:y" value="-105"/>
+    </component>
+    <component name="Map">
+        <param name="gui:x" value="-70"/>
+        <param name="gui:y" value="-99"/>
+    </component>
+    <component name="ConvertedDataOut">
+        <param name="gui:x" value="36"/>
+        <param name="gui:y" value="-99"/>
+    </component>
+</application-layout>

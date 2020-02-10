@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="Upd_Sta.Buffer2LocalFile"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <implements module-reference="Upd_Sta.SchemaControl"/>
+        <import from="Upd_Sta.SchemaControl"/>
+        <parameter-definitions>
+            <parameter default="SrcID" name="SrcID"/>
+            <parameter default="192.168.61.19:9092" name="Broker"/>
+        </parameter-definitions>
+        <dynamic-variables>
+            <dynamic-variable initial-expression="&quot;/home/digisight/Documents/StreamingData&quot;" name="RootPath" setter-expression="input.RootPath" setter-stream="RootPathConfig"/>
+            <dynamic-variable initial-expression="&quot;yyyyMMdd&quot;" name="dateFormat" setter-expression="input.dateFormat" setter-stream="TimeFormatConfig"/>
+        </dynamic-variables>
+        <data name="JDBCTable" type="jdbctable">
+            <param name="connection" value="IIP"/>
+        </data>
+        <stream name="ReloadCommandIn">
+            <schema>
+                <field name="reloadCommand" type="capture" type-name="whatEver"/>
+            </schema>
+        </stream>
+        <box name="Start" type="inputadapter">
+            <output port="1" stream="out:Start_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.once.Once"/>
+            <param name="OutputField" value="time"/>
+        </box>
+        <box name="Split2" type="split">
+            <input port="1" stream="out:Start_1"/>
+            <output port="1" stream="out:Split2_1"/>
+            <output port="2" stream="out:Split2_2"/>
+            <output port="3" stream="out:Split2_3"/>
+            <param name="output-count" value="3"/>
+        </box>
+        <box name="Split4" type="split">
+            <input port="1" stream="ReloadCommandIn"/>
+            <output port="1" stream="out:Split4_1"/>
+            <output port="2" stream="out:Split4_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <box name="Map" type="map">
+            <input port="1" stream="out:Split2_3"/>
+            <output port="1" stream="out:Map_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="command">"subscribe"</include>
+                    <include field="topic">"${SrcID}__raw"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Union" type="union">
+            <input port="1" stream="out:Split4_1"/>
+            <input port="2" stream="out:Split2_1"/>
+            <output port="1" stream="out:Union_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="Union2" type="union">
+            <input port="1" stream="out:Split4_2"/>
+            <input port="2" stream="out:Split2_2"/>
+            <output port="1" stream="out:Union2_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="Query" type="query">
+            <input port="1" stream="out:Union_1"/>
+            <output port="1" stream="out:Query_1"/>
+            <dataref id="jdbctable" name="JDBCTable"/>
+            <param name="sql" value="select * from SOA_BS_CONFIG where name='sb-config'"/>
+            <param name="use-callable-statements" value="false"/>
+            <param name="send-null-tuple" value="false"/>
+            <param name="jdbc-output-column" value="0"/>
+            <target-list>
+                <item name="table" selection="all"/>
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="result-set" value="query"/>
+        </box>
+        <box name="RawDataComsumer" type="inputadapter">
+            <input port="1" stream="out:Map_1"/>
+            <output port="1" stream="out:RawDataComsumer_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.kafka.KafkaConsumer"/>
+            <param name="AdvancedConfig-col0.0" value="auto.offset.reset"/>
+            <param name="AdvancedConfig-col0.1" value="group.id"/>
+            <param name="AdvancedConfig-col1.0" value="latest"/>
+            <param name="AdvancedConfig-col1.1" value="${SrcID}_rawData"/>
+            <param name="EnableMetricsPort" value="false"/>
+            <param name="EnableStatusPort" value="false"/>
+            <param name="brokers" value="${Broker}"/>
+            <param name="characterSet" value="UTF-8"/>
+            <param name="deserializerType" value="String"/>
+            <param name="enableCommandPort" value="true"/>
+            <param name="enablePassThroughFields" value="false"/>
+            <param name="keyDeserializerType" value="String"/>
+            <param name="keyOutputSchema" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;schema/&gt;&#13;&#10;"/>
+            <param name="logLevel" value="WARN"/>
+            <param name="maxFailureCount" value="5"/>
+            <param name="outputHighWaterMark" value="false"/>
+            <param name="outputLatestOffsetStatusMessage" value="false"/>
+            <param name="outputSchema" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;schema&gt;&#13;&#10;    &lt;field name=&quot;data&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field name=&quot;SrcID&quot; type=&quot;string&quot;/&gt;&#13;&#10;&lt;/schema&gt;&#13;&#10;"/>
+            <param name="performCommit" value="false"/>
+            <param name="pollWaitMS" value="100"/>
+            <param name="useDefaultcharacterSet" value="true"/>
+            <param name="userDeserializerClass" value=""/>
+            <param name="userKeyDeserializerClass" value=""/>
+        </box>
+        <box name="Filter" type="filter">
+            <input port="1" stream="out:Query_1"/>
+            <output port="1" stream="out:Filter_1"/>
+            <output port="2" stream="out:Filter_2"/>
+            <param name="autogen-nomatch-port" value="false"/>
+            <param name="expression.0" value="KEE='dateFormat'"/>
+            <param name="expression.1" value="KEE='RootPath'"/>
+        </box>
+        <box name="Java" type="java">
+            <input port="1" stream="out:RawDataComsumer_1"/>
+            <output port="1" stream="out:Java_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.operator.jsontuple.JSON2Tuple"/>
+            <param name="enableLooseParsing" value="false"/>
+            <param name="enablePassThroughFields" value="false"/>
+            <param name="enableStatusPort" value="false"/>
+            <param name="jsonFieldName" value="message"/>
+            <param name="logLevel" value="WARN"/>
+            <param name="outputSchema" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;schema&gt;&#13;&#10;    &lt;field name=&quot;UUID&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field name=&quot;Station&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field name=&quot;Addr&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field name=&quot;lon&quot; type=&quot;double&quot;/&gt;&#13;&#10;    &lt;field name=&quot;lat&quot; type=&quot;double&quot;/&gt;&#13;&#10;    &lt;field name=&quot;TotalCnt&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field name=&quot;FullCnt&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field name=&quot;EmptyCnt&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field name=&quot;UpdateTime&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field name=&quot;CheckKey&quot; type=&quot;string&quot;/&gt;&#13;&#10;&lt;/schema&gt;&#13;&#10;"/>
+            <param name="passThroughFieldsFieldName" value="PassThroughFields"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+        </box>
+        <box name="Map4" type="map">
+            <input port="1" stream="out:Filter_1"/>
+            <output port="1" stream="TimeFormatConfig"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="dateFormat">VALUE</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Map5" type="map">
+            <input port="1" stream="out:Filter_2"/>
+            <output port="1" stream="out:Map5_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="RootPath">VALUE</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Split" type="split">
+            <input port="1" stream="out:Java_1"/>
+            <output port="1" stream="out:Split_1"/>
+            <output port="2" stream="out:Split_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <output-stream name="TimeFormatConfig"/>
+        <box name="Map2" type="map">
+            <input port="1" stream="out:Split_1"/>
+            <output port="1" stream="out:Map2_1"/>
+            <target-list>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="filePath">RootPath+"/${SrcID}/"+format_time(now(),"yyyy")+"/"+format_time(now(),"M")+"/"+getHostName()+"_"+getNodeName()+"_"+format_time(now(),dateFormat)+".csv"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Map3" type="map">
+            <input port="1" stream="out:Split_2"/>
+            <output port="1" stream="out:Map3_1"/>
+            <target-list>
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="Split3" type="split">
+            <input port="1" stream="out:Map5_1"/>
+            <output port="1" stream="RootPathConfig"/>
+            <output port="2" stream="out:Split3_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <output-stream name="RootPathConfig"/>
+        <module-reference name="FolderCreator">
+            <input name="ReloadCommandIn" port="1" stream="out:Union2_1"/>
+            <input name="RootPathConfig" port="2" stream="out:Split3_2"/>
+            <output name="CreateResult" port="1" stream="FolderList"/>
+            <param name="file" value="com.iisigroup.iip.utility.FolderCreator"/>
+            <parameter-bindings>
+                <binding name="SrcID" value="${SrcID}"/>
+            </parameter-bindings>
+        </module-reference>
+        <box name="WriteCSV" type="outputadapter">
+            <input port="1" stream="out:Map3_1"/>
+            <input port="2" stream="out:Map2_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.csvwriter.CSVWriter"/>
+            <param name="AddTimestamp" value="None"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="Charset" value="UTF-8"/>
+            <param name="CheckForRollAtStartup" value="false"/>
+            <param name="CompressData" value="false"/>
+            <param name="FieldDelimiter" value=","/>
+            <param name="FileName" value=""/>
+            <param name="FlushInterval" value="1"/>
+            <param name="IfFileDoesntExist" value="Create new file"/>
+            <param name="IfFileExists" value="Append to existing file"/>
+            <param name="IncludeHeaderInFile" value="true"/>
+            <param name="MaxFileSize" value=""/>
+            <param name="MaxRollSecs" value=""/>
+            <param name="NullValueRepresentation" value="null"/>
+            <param name="OpenOutputFileDuringInit" value="false"/>
+            <param name="PassThroughDataToEventPort" value="true"/>
+            <param name="RollHour" value="0"/>
+            <param name="RollMinute" value="0"/>
+            <param name="RollPeriod" value="None"/>
+            <param name="RollSecond" value="0"/>
+            <param name="StartControlPort" value="true"/>
+            <param name="StartEventPort" value="false"/>
+            <param name="StringQuoteCharacter" value="&quot;"/>
+            <param name="StringQuoteOption" value="Quote if necessary"/>
+            <param name="SyncOnFlush" value="false"/>
+            <param name="ThrottleErrorMessages" value="false"/>
+            <param name="TimestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="UseDefaultCharset" value="false"/>
+            <param name="logLevel" value="INFO"/>
+        </box>
+        <output-stream name="FolderList"/>
+    </add>
+</modify>

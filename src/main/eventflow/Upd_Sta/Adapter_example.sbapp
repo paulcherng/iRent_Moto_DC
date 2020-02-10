@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="Upd_Sta.Adapter_example"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <implements module-reference="Upd_Sta.SchemaControl"/>
+        <import from="Upd_Sta.SchemaControl"/>
+        <parameter-definitions>
+            <parameter default="SrcID" name="SrcID"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <data name="JDBCTable" type="jdbctable">
+            <param name="connection" value="IIP"/>
+        </data>
+        <stream name="InputSchema" schema="rawData"/>
+        <stream name="ReloadCommandIn">
+            <schema>
+                <field name="reloadCommand" type="capture" type-name="reloadCommand"/>
+            </schema>
+        </stream>
+        <box name="Query" type="query">
+            <input port="1" stream="ReloadCommandIn"/>
+            <output port="1" stream="out:Query_1"/>
+            <dataref id="jdbctable" name="JDBCTable"/>
+            <param name="sql" value="select * from SOA_BS_CONFIG where Name='sb-config' and Kee=''"/>
+            <param name="use-callable-statements" value="false"/>
+            <param name="send-null-tuple" value="false"/>
+            <param name="jdbc-output-column" value="0"/>
+            <target-list>
+                <item name="table" selection="all"/>
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="result-set" value="query"/>
+        </box>
+        <module-reference name="WebInput">
+            <input name="InputStream" port="1" stream="InputSchema"/>
+            <output name="OutputStream" port="1" stream="out:WebInput_1"/>
+            <param name="file" value="resources_adapters.WebInput_template"/>
+            <parameter-bindings>
+                <binding name="SrcID" value="${SrcID}"/>
+            </parameter-bindings>
+        </module-reference>
+        <box name="Map" type="map">
+            <input port="1" stream="out:Query_1"/>
+            <output port="1" stream="OutputStream"/>
+            <target-list>
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="Map2" type="map">
+            <input port="1" stream="out:WebInput_1"/>
+            <output port="1" stream="RawDataOut"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="UUID">uuid()</include>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="OutputStream"/>
+        <output-stream name="RawDataOut">
+            <schema>
+                <field name="UUID" type="string"/>
+                <field name="Station" type="string"/>
+                <field name="Addr" type="string"/>
+                <field name="lon" type="double"/>
+                <field name="lat" type="double"/>
+                <field name="TotalCnt" type="string"/>
+                <field name="FullCnt" type="string"/>
+                <field name="EmptyCnt" type="string"/>
+                <field name="UpdateTime" type="string"/>
+                <field name="CheckKey" type="string"/>
+            </schema>
+        </output-stream>
+    </add>
+</modify>

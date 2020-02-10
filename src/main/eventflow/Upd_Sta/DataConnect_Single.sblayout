@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="AdapterPart">
+        <param name="gui:x" value="-671"/>
+        <param name="gui:y" value="319"/>
+    </component>
+    <component name="Buffer2LocalFileraw">
+        <param name="gui:x" value="-1051"/>
+        <param name="gui:y" value="165"/>
+        <param name="gui:bends:1" value="-1099,212;-1095,195"/>
+    </component>
+    <component name="ConvertedData2Process">
+        <param name="gui:x" value="1334"/>
+        <param name="gui:y" value="69"/>
+        <param name="gui:bends:1" value="1271,121;1275,99"/>
+    </component>
+    <component name="ConverterLog">
+        <param name="gui:x" value="372"/>
+        <param name="gui:y" value="308"/>
+        <param name="gui:bends:1" value="356,356;360,339"/>
+    </component>
+    <component name="ConverterLogCopy">
+        <param name="gui:x" value="-413"/>
+        <param name="gui:y" value="268"/>
+    </component>
+    <component name="ConverterPart">
+        <param name="gui:x" value="119"/>
+        <param name="gui:y" value="399"/>
+        <param name="gui:bends:1" value="62,440;64,428"/>
+    </component>
+    <component name="RawQueue">
+        <param name="gui:x" value="307"/>
+        <param name="gui:y" value="165"/>
+        <param name="gui:bends:1" value="233,283;255,195"/>
+    </component>
+    <component name="ReloadConfiguration">
+        <param name="gui:x" value="-1350"/>
+        <param name="gui:y" value="30"/>
+        <param name="gui:height" value="185"/>
+    </component>
+    <component name="ValidationLog">
+        <param name="gui:x" value="1074"/>
+        <param name="gui:y" value="6"/>
+        <param name="gui:bends:1" value="1030,53;1032,38"/>
+    </component>
+    <component name="ValidationPart">
+        <param name="gui:x" value="802"/>
+        <param name="gui:y" value="65"/>
+        <param name="gui:bends:1" value="692,417;774,85"/>
+        <param name="gui:bends:2" value="-1128,202;-1104,105"/>
+    </component>
+    <component name="AdapterLPSwitch">
+        <param name="gui:x" value="-539"/>
+        <param name="gui:y" value="278"/>
+        <param name="gui:height" value="197"/>
+        <param name="gui:bends:1" value="-576,358;-572,375"/>
+    </component>
+    <component name="ConfigLPSwitch">
+        <param name="gui:x" value="-1051"/>
+        <param name="gui:y" value="263"/>
+        <param name="gui:height" value="197"/>
+        <param name="gui:bends:1" value="-1139,222;-1122,361"/>
+    </component>
+    <component name="ConfigLog">
+        <param name="gui:x" value="-935"/>
+        <param name="gui:y" value="236"/>
+        <param name="gui:bends:1" value="-960,283;-956,266"/>
+    </component>
+    <component name="ConfigOutUnion">
+        <param name="gui:x" value="-858"/>
+        <param name="gui:y" value="263"/>
+        <param name="gui:height" value="197"/>
+        <param name="gui:bends:1" value="-862,266;-860,283"/>
+    </component>
+    <component name="ConverterLPSwitch">
+        <param name="gui:x" value="284"/>
+        <param name="gui:y" value="335"/>
+        <param name="gui:height" value="188"/>
+    </component>
+    <component name="ConverterOutUnion">
+        <param name="gui:x" value="523"/>
+        <param name="gui:y" value="314"/>
+        <param name="gui:height" value="209"/>
+        <param name="gui:bends:1" value="486,339;486,335"/>
+    </component>
+    <component name="Map">
+        <param name="gui:x" value="-254"/>
+        <param name="gui:y" value="268"/>
+    </component>
+    <component name="Split">
+        <param name="gui:x" value="-48"/>
+        <param name="gui:y" value="263"/>
+        <param name="gui:height" value="197"/>
+        <param name="gui:bends:1" value="-93,375;-91,361"/>
+    </component>
+    <component name="Split2">
+        <param name="gui:x" value="-1209"/>
+        <param name="gui:y" value="182"/>
+        <param name="gui:bends:1" value="-1241,195;-1237,212"/>
+    </component>
+    <component name="ValidationLPSwitch">
+        <param name="gui:x" value="940"/>
+        <param name="gui:y" value="32"/>
+        <param name="gui:height" value="180"/>
+        <param name="gui:bends:1" value="895,105;899,121"/>
+    </component>
+    <component name="ValidationOutUnion">
+        <param name="gui:x" value="1169"/>
+        <param name="gui:y" value="33"/>
+        <param name="gui:height" value="179"/>
+        <param name="gui:bends:1" value="1142,38;1146,54"/>
+    </component>
+    <component name="adapterOutUnion">
+        <param name="gui:x" value="-184"/>
+        <param name="gui:y" value="278"/>
+        <param name="gui:height" value="197"/>
+    </component>
+    <component name="LPflagConfig">
+        <param name="gui:x" value="-1209"/>
+        <param name="gui:y" value="37"/>
+        <param name="gui:bends:1" value="-1241,50;-1237,67"/>
+    </component>
+    <component name="OutputStream">
+        <param name="gui:x" value="42"/>
+        <param name="gui:y" value="628"/>
+    </component>
+    <component name="OutputStream2">
+        <param name="gui:x" value="334"/>
+        <param name="gui:y" value="646"/>
+    </component>
+    <component name="adapter_part">
+        <param name="gui:x" value="-734"/>
+        <param name="gui:y" value="223"/>
+        <param name="gui:width" value="642"/>
+        <param name="gui:height" value="276"/>
+    </component>
+    <component name="converter_part">
+        <param name="gui:x" value="50"/>
+        <param name="gui:y" value="263"/>
+        <param name="gui:width" value="573"/>
+        <param name="gui:height" value="284"/>
+    </component>
+    <component name="validation_part">
+        <param name="gui:x" value="733"/>
+        <param name="gui:y" value="-39"/>
+        <param name="gui:width" value="537"/>
+        <param name="gui:height" value="275"/>
+    </component>
+    <gui.group name="adapter_part" visual-state="open">
+        <member name="AdapterLPSwitch"/>
+        <member name="AdapterPart"/>
+        <member name="adapterOutUnion"/>
+        <member name="ConverterLogCopy"/>
+        <member name="Map"/>
+        <param name="gui:x" value="-734"/>
+        <param name="gui:y" value="223"/>
+        <param name="gui:width" value="642"/>
+        <param name="gui:height" value="276"/>
+    </gui.group>
+    <gui.group name="converter_part" visual-state="open">
+        <member name="ConverterLPSwitch"/>
+        <member name="ConverterPart"/>
+        <member name="ConverterOutUnion"/>
+        <member name="ConverterLog"/>
+        <param name="gui:x" value="50"/>
+        <param name="gui:y" value="263"/>
+        <param name="gui:width" value="573"/>
+        <param name="gui:height" value="284"/>
+    </gui.group>
+    <gui.group name="validation_part" visual-state="open">
+        <member name="ValidationPart"/>
+        <member name="ValidationLPSwitch"/>
+        <member name="ValidationOutUnion"/>
+        <member name="ValidationLog"/>
+        <param name="gui:x" value="733"/>
+        <param name="gui:y" value="-39"/>
+        <param name="gui:width" value="537"/>
+        <param name="gui:height" value="275"/>
+    </gui.group>
+</application-layout>
