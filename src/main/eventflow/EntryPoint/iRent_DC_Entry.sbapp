@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="EntryPoint.iRent_DC_Entry"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <parameter-definitions>
+            <parameter default="192.168.61.14:9092" name="Broker"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <module-reference name="iRent_Car">
+            <output name="LPflagConfig" port="1" stream="out:iRent_Car_1"/>
+            <param name="file" value="iRent_Car.DataConnect_Single"/>
+            <parameter-bindings>
+                <binding name="Broker" value="${Broker}"/>
+                <binding name="SrcID" value="iRent_Car"/>
+            </parameter-bindings>
+        </module-reference>
+        <module-reference disabled="true" name="iRent_Motocycle">
+            <output name="LPflagConfig" port="1" stream="out:iRent_Motocycle_1"/>
+            <param name="file" value="iRent_Motocycle.DataConnect_Single"/>
+            <parameter-bindings>
+                <binding name="SrcID" value="iRent_Motocycle"/>
+                <binding name="Broker" value="${Broker}"/>
+            </parameter-bindings>
+        </module-reference>
+        <module-reference name="iRent_Station">
+            <output name="LPflagConfig" port="1" stream="out:iRent_Station_1"/>
+            <param name="file" value="iRent_Station.DataConnect_Single"/>
+            <parameter-bindings>
+                <binding name="Broker" value="${Broker}"/>
+                <binding name="SrcID" value="iRent_Station"/>
+            </parameter-bindings>
+        </module-reference>
+    </add>
+</modify>

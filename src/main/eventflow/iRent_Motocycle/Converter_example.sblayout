@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?><application-layout>
+    <component name="ConverterInput">
+        <param name="gui:x" value="-577"/>
+        <param name="gui:y" value="-105"/>
+    </component>
+    <component name="Map">
+        <param name="gui:x" value="474"/>
+        <param name="gui:y" value="-105"/>
+    </component>
+    <component name="Map2">
+        <param name="gui:x" value="-107"/>
+        <param name="gui:y" value="-118"/>
+    </component>
+    <component name="ConverterOutput">
+        <param name="gui:x" value="690"/>
+        <param name="gui:y" value="-104"/>
+    </component>
+    <component name="ModifyPart">
+        <param name="gui:x" value="-108"/>
+        <param name="gui:y" value="-142"/>
+        <param name="gui:width" value="290"/>
+        <param name="gui:height" value="304"/>
+    </component>
+    <gui.group name="ModifyPart" visual-state="open">
+        <member name="Map2"/>
+        <param name="gui:x" value="-108"/>
+        <param name="gui:y" value="-142"/>
+        <param name="gui:width" value="290"/>
+        <param name="gui:height" value="304"/>
+    </gui.group>
+</application-layout>

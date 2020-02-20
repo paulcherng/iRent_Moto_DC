@@ -92,15 +92,14 @@
         <module-reference name="AdapterPart">
             <input name="ReloadCommandIn" port="1" stream="out:ConfigOutUnion_1"/>
             <output name="OutputStream" port="1" stream="out:AdapterPart_1"/>
-            <output name="RawDataOut" port="2" stream="OutputStream"/>
+            <output name="RawDataOut" port="2" stream="out:AdapterPart_2"/>
             <param name="file" value="Upd_Sta.Adapter_example"/>
             <parameter-bindings>
                 <binding name="SrcID" value="${SrcID}"/>
             </parameter-bindings>
         </module-reference>
-        <output-stream name="OutputStream"/>
         <box name="AdapterLPSwitch" type="filter">
-            <input port="1" stream="OutputStream"/>
+            <input port="1" stream="out:AdapterPart_2"/>
             <output port="1" stream="out:AdapterLPSwitch_1"/>
             <output port="2" stream="out:AdapterLPSwitch_2"/>
             <param name="autogen-nomatch-port" value="true"/>
@@ -141,7 +140,7 @@
         </box>
         <module-reference name="ConverterPart">
             <input name="RawDataIn" port="1" stream="out:Split_2"/>
-            <output name="ConvertedDataOut" port="1" stream="OutputStream2"/>
+            <output name="ConvertedDataOut" port="1" stream="out:ConverterPart_1"/>
             <param name="file" value="Upd_Sta.Converter_example"/>
             <parameter-bindings>
                 <binding name="SrcID" value="${SrcID}"/>
@@ -157,9 +156,8 @@
                 <binding name="Broker" value="${Broker}"/>
             </parameter-bindings>
         </module-reference>
-        <output-stream name="OutputStream2"/>
         <box name="ConverterLPSwitch" type="filter">
-            <input port="1" stream="OutputStream2"/>
+            <input port="1" stream="out:ConverterPart_1"/>
             <output port="1" stream="out:ConverterLPSwitch_1"/>
             <output port="2" stream="out:ConverterLPSwitch_2"/>
             <param name="autogen-nomatch-port" value="true"/>

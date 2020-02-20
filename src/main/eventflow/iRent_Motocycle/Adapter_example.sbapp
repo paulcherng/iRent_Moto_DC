@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="iRent_Motocycle.Adapter_example"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <implements module-reference="SharedInterface.iRent_Motocycle"/>
+        <import from="SharedInterface.iRent_Motocycle"/>
+        <parameter-definitions>
+            <parameter default="SrcID" name="SrcID"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <data name="JDBCTable" type="jdbctable">
+            <param name="connection" value="IIP"/>
+        </data>
+        <stream name="InputSchema" schema="rawData"/>
+        <stream name="ReloadCommandIn">
+            <schema>
+                <field name="reloadCommand" type="capture" type-name="reloadCommand"/>
+            </schema>
+        </stream>
+        <box name="Split" type="split">
+            <input port="1" stream="ReloadCommandIn"/>
+            <output port="1" stream="out:Split_1"/>
+            <output port="2" stream="out:Split_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <module-reference name="WebInput">
+            <input name="InputStream" port="1" stream="InputSchema"/>
+            <output name="OutputStream" port="1" stream="out:WebInput_1"/>
+            <param name="file" value="resources_adapters.WebInput_template"/>
+            <parameter-bindings>
+                <binding name="SrcID" value="${SrcID}"/>
+            </parameter-bindings>
+        </module-reference>
+        <box name="Query" type="query">
+            <input port="1" stream="out:Split_1"/>
+            <output port="1" stream="out:Query_1"/>
+            <dataref id="jdbctable" name="JDBCTable"/>
+            <param name="sql" value="select * from SOA_BS_CONFIG where Name='sb-config' and Kee=''"/>
+            <param name="use-callable-statements" value="false"/>
+            <param name="send-null-tuple" value="false"/>
+            <param name="jdbc-output-column" value="0"/>
+            <target-list>
+                <item name="table" selection="all"/>
+                <item name="input" selection="none"/>
+            </target-list>
+            <param name="result-set" value="query"/>
+        </box>
+        <box name="Query2" type="query">
+            <input port="1" stream="out:Split_2"/>
+            <output port="1" stream="out:Query2_1"/>
+            <dataref id="jdbctable" name="JDBCTable"/>
+            <param name="sql" value="select * from soa_bs_config"/>
+            <param name="use-callable-statements" value="false"/>
+            <param name="send-null-tuple" value="false"/>
+            <param name="jdbc-output-column" value="0"/>
+            <target-list>
+                <item name="table" selection="none"/>
+                <item name="input" selection="none"/>
+                <expressions>
+                    <include field="SrcID">"SrcID"</include>
+                    <include field="InputInterval">30000</include>
+                </expressions>
+            </target-list>
+            <param name="result-set" value="query"/>
+        </box>
+        <box name="Split2" type="split">
+            <input port="1" stream="out:WebInput_1"/>
+            <output port="1" stream="out:Split2_1"/>
+            <output port="2" stream="out:Split2_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <box name="Map" type="map">
+            <input port="1" stream="out:Query_1"/>
+            <output port="1" stream="OutputStream"/>
+            <target-list>
+                <item name="input" selection="all"/>
+            </target-list>
+        </box>
+        <box name="Map2" type="map">
+            <input port="1" stream="out:Split2_2"/>
+            <output port="1" stream="RawDataOut"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="UUID">uuid()</include>
+                    <include field="RcvTime">now()</include>
+                </expressions>
+            </target-list>
+        </box>
+        <module-reference name="Module">
+            <input name="ReloadCommandIn" port="1" stream="out:Query2_1"/>
+            <input name="DataInput" port="2" stream="out:Split2_1"/>
+            <param name="file" value="adapter_rule.AliveCheck"/>
+        </module-reference>
+        <output-stream name="OutputStream"/>
+        <output-stream name="RawDataOut" schema="AdapterOut"/>
+    </add>
+</modify>

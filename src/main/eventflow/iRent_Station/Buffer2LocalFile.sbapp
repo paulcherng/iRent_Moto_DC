@@ -85,7 +85,7 @@
         </box>
         <box name="RawDataComsumer" type="inputadapter">
             <input port="1" stream="out:Map_1"/>
-            <output port="1" stream="out:RawDataComsumer_1"/>
+            <output port="1" stream="OutputStream"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.streambase.sb.adapter.kafka.KafkaConsumer"/>
             <param name="AdvancedConfig-col0.0" value="auto.offset.reset"/>
@@ -108,10 +108,11 @@
             <param name="outputSchema" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&lt;schema&gt;&#13;&#10;    &lt;field name=&quot;data&quot; type=&quot;string&quot;/&gt;&#13;&#10;    &lt;field name=&quot;SrcID&quot; type=&quot;string&quot;/&gt;&#13;&#10;&lt;/schema&gt;&#13;&#10;"/>
             <param name="performCommit" value="false"/>
             <param name="pollWaitMS" value="100"/>
-            <param name="useDefaultcharacterSet" value="true"/>
+            <param name="useDefaultcharacterSet" value="false"/>
             <param name="userDeserializerClass" value=""/>
             <param name="userKeyDeserializerClass" value=""/>
         </box>
+        <output-stream name="OutputStream" scope="public"/>
         <box name="Filter" type="filter">
             <input port="1" stream="out:Query_1"/>
             <output port="1" stream="out:Filter_1"/>
@@ -121,8 +122,8 @@
             <param name="expression.1" value="KEE='RootPath'"/>
         </box>
         <box name="Java" type="java">
-            <input port="1" stream="out:RawDataComsumer_1"/>
-            <output port="1" stream="out:Java_1"/>
+            <input port="1" stream="OutputStream"/>
+            <output port="1" stream="OutputStream2"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.streambase.sb.operator.jsontuple.JSON2Tuple"/>
             <param name="enableLooseParsing" value="false"/>
@@ -134,6 +135,7 @@
             <param name="passThroughFieldsFieldName" value="PassThroughFields"/>
             <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
         </box>
+        <output-stream name="OutputStream2" scope="public"/>
         <box name="Map4" type="map">
             <input port="1" stream="out:Filter_1"/>
             <output port="1" stream="TimeFormatConfig"/>
@@ -155,7 +157,7 @@
             </target-list>
         </box>
         <box name="Split" type="split">
-            <input port="1" stream="out:Java_1"/>
+            <input port="1" stream="OutputStream2"/>
             <output port="1" stream="out:Split_1"/>
             <output port="2" stream="out:Split_2"/>
             <param name="output-count" value="2"/>
@@ -197,6 +199,7 @@
         <box name="WriteCSV" type="outputadapter">
             <input port="1" stream="out:Map3_1"/>
             <input port="2" stream="out:Map2_1"/>
+            <output port="1" stream="OutputStream3"/>
             <param name="start:state" value="true"/>
             <param name="javaclass" value="com.streambase.sb.adapter.csvwriter.CSVWriter"/>
             <param name="AddTimestamp" value="None"/>
@@ -220,7 +223,7 @@
             <param name="RollPeriod" value="None"/>
             <param name="RollSecond" value="0"/>
             <param name="StartControlPort" value="true"/>
-            <param name="StartEventPort" value="false"/>
+            <param name="StartEventPort" value="true"/>
             <param name="StringQuoteCharacter" value="&quot;"/>
             <param name="StringQuoteOption" value="Quote if necessary"/>
             <param name="SyncOnFlush" value="false"/>
@@ -230,5 +233,6 @@
             <param name="logLevel" value="INFO"/>
         </box>
         <output-stream name="FolderList"/>
+        <output-stream name="OutputStream3" scope="public"/>
     </add>
 </modify>

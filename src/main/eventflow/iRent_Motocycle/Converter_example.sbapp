@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="iRent_Motocycle.Converter_example"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <implements module-reference="SharedInterface.iRent_Motocycle"/>
+        <import from="SharedInterface.iRent_Motocycle"/>
+        <parameter-definitions>
+            <parameter default="SrcID" name="SrcID"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <stream name="ConverterInput" schema="AdapterOut"/>
+        <box name="Map2" type="map">
+            <input port="1" stream="ConverterInput"/>
+            <output port="1" stream="out:Map2_1"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="UUID"/>
+                </item>
+                <expressions>
+                    <include field="CID">"CID1"</include>
+                    <include field="Time">"nowTime"</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Map" type="map">
+            <input port="1" stream="out:Map2_1"/>
+            <output port="1" stream="ConverterOutput"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="SrcID">"${SrcID}"</include>
+                    <include field="SnsrType">""</include>
+                    <include field="SnsrID">""</include>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="ConverterOutput" schema="CVSOut"/>
+    </add>
+</modify>

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="iRent_Motocycle.DataConnect_Single"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <parameter-definitions>
+            <parameter default="SrcID" name="SrcID"/>
+            <parameter default="192.168.61.14:9092" name="Broker"/>
+        </parameter-definitions>
+        <dynamic-variables>
+            <dynamic-variable initial-expression="false" name="adapterFlag" setter-expression="input.adapterFlag" setter-stream="LPflagConfig"/>
+            <dynamic-variable initial-expression="false" name="converterFlag" setter-expression="input.converterFlag" setter-stream="LPflagConfig"/>
+            <dynamic-variable initial-expression="false" name="dataConnectFlag" setter-expression="input.dataConnectFlag" setter-stream="LPflagConfig"/>
+            <dynamic-variable initial-expression="false" name="validationFlag" setter-expression="input.validationFlag" setter-stream="LPflagConfig"/>
+        </dynamic-variables>
+        <module-reference name="ReloadConfiguration">
+            <output name="flagConfigOut" port="1" stream="LPflagConfig"/>
+            <output name="ReloadConfig" port="2" stream="out:ReloadConfiguration_2"/>
+            <param name="file" value="com.iisigroup.iip.utility.ReloadConfiguration"/>
+            <parameter-bindings>
+                <binding name="SrcID" value="${SrcID}"/>
+                <binding name="Broker" value="${Broker}"/>
+            </parameter-bindings>
+        </module-reference>
+        <output-stream name="LPflagConfig"/>
+        <box name="Split2" type="split">
+            <input port="1" stream="out:ReloadConfiguration_2"/>
+            <output port="1" stream="out:Split2_1"/>
+            <output port="2" stream="out:Split2_2"/>
+            <output port="3" stream="out:Split2_3"/>
+            <param name="output-count" value="3"/>
+        </box>
+        <module-reference name="Buffer2LocalFileraw">
+            <input name="ReloadCommandIn" port="1" stream="out:Split2_2"/>
+            <output name="FolderList" port="1" stream="out:Buffer2LocalFileraw_1"/>
+            <output name="RootPathConfig" port="2" stream="out:Buffer2LocalFileraw_2"/>
+            <output name="TimeFormatConfig" port="3" stream="out:Buffer2LocalFileraw_3"/>
+            <param name="file" value="iRent_Motocycle.Buffer2LocalFile"/>
+            <parameter-bindings>
+                <binding name="Broker" value="${Broker}"/>
+                <binding name="SrcID" value="${SrcID}"/>
+            </parameter-bindings>
+        </module-reference>
+        <box name="ConfigLPSwitch" type="filter">
+            <input port="1" stream="out:Split2_3"/>
+            <output port="1" stream="out:ConfigLPSwitch_1"/>
+            <output port="2" stream="out:ConfigLPSwitch_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="dataConnectFlag"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <box name="ConfigLog" type="outputadapter">
+            <input port="1" stream="out:ConfigLPSwitch_1"/>
+            <output port="1" stream="out:ConfigLog_1"/>
+            <param name="start:state" value="true"/>
+            <param name="javaclass" value="com.streambase.sb.adapter.logger.Log"/>
+            <param name="CaptureStrategy" value="FLATTEN"/>
+            <param name="asyncEnabled" value="true"/>
+            <param name="compressFrequentMessages" value="false"/>
+            <param name="compressMaxWindowSize" value="5.0"/>
+            <param name="customFormat" value=""/>
+            <param name="customFormatExpression" value=""/>
+            <param name="customFormatType" value="Basic"/>
+            <param name="emitLoggedTuples" value="true"/>
+            <param name="encodeSubType" value="Map"/>
+            <param name="hexEncodeBlobs" value="false"/>
+            <param name="includeNullFields" value="true"/>
+            <param name="logLevel" value="Info"/>
+            <param name="logLevelOverrideFieldName" value=""/>
+            <param name="loggerFormatType" value="JSON"/>
+            <param name="messageIdentifier" value="Logger"/>
+            <param name="messageIdentifierExpression" value="getNodeName()+&quot;_${SrcID}_ConnectConfig&quot;"/>
+            <param name="messageIdentifierType" value="Expression"/>
+            <param name="messagePrefix" value=""/>
+            <param name="quoteNullStrings" value="true"/>
+            <param name="timestampAsLong" value="false"/>
+            <param name="timestampFormat" value="yyyy-MM-dd HH:mm:ss.SSSZ"/>
+            <param name="verbose" value="false"/>
+        </box>
+        <box name="ConfigOutUnion" type="union">
+            <input port="1" stream="out:ConfigLog_1"/>
+            <input port="2" stream="out:ConfigLPSwitch_2"/>
+            <output port="1" stream="out:ConfigOutUnion_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <module-reference name="AdapterPart">
+            <input name="ReloadCommandIn" port="1" stream="out:ConfigOutUnion_1"/>
+            <output name="OutputStream" port="1" stream="out:AdapterPart_1"/>
+            <output name="RawDataOut" port="2" stream="out:AdapterPart_2"/>
+            <param name="file" value="iRent_Motocycle.Adapter_example"/>
+            <parameter-bindings>
+                <binding name="SrcID" value="${SrcID}"/>
+            </parameter-bindings>
+        </module-reference>
+        <box name="AdapterLPSwitch" type="filter">
+            <input port="1" stream="out:AdapterPart_2"/>
+            <output port="1" stream="out:AdapterLPSwitch_1"/>
+            <output port="2" stream="out:AdapterLPSwitch_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="dataConnectFlag and adapterFlag"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <module-reference name="ConverterLogCopy">
+            <input name="RawDataIn" port="1" stream="out:AdapterLPSwitch_1"/>
+            <output name="PassThrough" port="1" stream="out:ConverterLogCopy_1"/>
+            <param name="file" value="com.iisigroup.iip.utility.Logging"/>
+            <parameter-bindings>
+                <binding name="logPoint" value="01Adapter"/>
+                <binding name="SrcID" value="${SrcID}"/>
+                <binding name="Broker" value="${Broker}"/>
+            </parameter-bindings>
+        </module-reference>
+        <box name="Map" type="map">
+            <input port="1" stream="out:ConverterLogCopy_1"/>
+            <output port="1" stream="out:Map_1"/>
+            <target-list>
+                <item name="input" selection="all">
+                    <remove field="SrcID"/>
+                    <remove field="SnsrID"/>
+                </item>
+            </target-list>
+        </box>
+        <box name="adapterOutUnion" type="union">
+            <input port="1" stream="out:Map_1"/>
+            <input port="2" stream="out:AdapterLPSwitch_2"/>
+            <output port="1" stream="out:adapterOutUnion_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <box name="Split" type="split">
+            <input port="1" stream="out:adapterOutUnion_1"/>
+            <output port="1" stream="out:Split_1"/>
+            <output port="2" stream="out:Split_2"/>
+            <param name="output-count" value="2"/>
+        </box>
+        <module-reference name="ConverterPart">
+            <input name="ConverterInput" port="1" stream="out:Split_2"/>
+            <output name="ConverterOutput" port="1" stream="out:ConverterPart_1"/>
+            <param name="file" value="iRent_Motocycle.Converter_example"/>
+            <parameter-bindings>
+                <binding name="SrcID" value="${SrcID}"/>
+            </parameter-bindings>
+        </module-reference>
+        <module-reference name="RawQueue">
+            <input name="DataIn" port="1" stream="out:Split_1"/>
+            <output name="ProduceOut" port="1" stream="out:RawQueue_1"/>
+            <param name="file" value="com.iisigroup.iip.utility.DataBuffer"/>
+            <parameter-bindings>
+                <binding name="SrcID" value="${SrcID}"/>
+                <binding name="dataType" value="raw"/>
+                <binding name="Broker" value="${Broker}"/>
+            </parameter-bindings>
+        </module-reference>
+        <box name="ConverterLPSwitch" type="filter">
+            <input port="1" stream="out:ConverterPart_1"/>
+            <output port="1" stream="out:ConverterLPSwitch_1"/>
+            <output port="2" stream="out:ConverterLPSwitch_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="dataConnectFlag and converterFlag"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <module-reference name="ConverterLog">
+            <input name="DataIn" port="1" stream="out:ConverterLPSwitch_1"/>
+            <output name="PassThrough" port="1" stream="out:ConverterLog_1"/>
+            <param name="file" value="com.iisigroup.iip.utility.Logging"/>
+            <parameter-bindings>
+                <binding name="logPoint" value="02Converter"/>
+                <binding name="SrcID" value="${SrcID}"/>
+                <binding name="Broker" value="${Broker}"/>
+            </parameter-bindings>
+        </module-reference>
+        <box name="ConverterOutUnion" type="union">
+            <input port="1" stream="out:ConverterLog_1"/>
+            <input port="2" stream="out:ConverterLPSwitch_2"/>
+            <output port="1" stream="out:ConverterOutUnion_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <module-reference name="ValidationPart">
+            <input name="LoadRuleCommandIn" port="1" stream="out:Split2_1"/>
+            <input name="ValidationInput" port="2" stream="out:ConverterOutUnion_1"/>
+            <output name="RuleListOut" port="1" stream="out:ValidationPart_1"/>
+            <output name="ValidationOutput" port="2" stream="out:ValidationPart_2"/>
+            <param name="file" value="iRent_Motocycle.Validation_example"/>
+        </module-reference>
+        <box name="ValidationLPSwitch" type="filter">
+            <input port="1" stream="out:ValidationPart_2"/>
+            <output port="1" stream="out:ValidationLPSwitch_1"/>
+            <output port="2" stream="out:ValidationLPSwitch_2"/>
+            <param name="autogen-nomatch-port" value="true"/>
+            <param name="expression.0" value="dataConnectFlag and validationFlag"/>
+            <param name="expression.1" value="true"/>
+        </box>
+        <module-reference name="ValidationLog">
+            <input name="DataIn" port="1" stream="out:ValidationLPSwitch_1"/>
+            <output name="PassThrough" port="1" stream="out:ValidationLog_1"/>
+            <param name="file" value="com.iisigroup.iip.utility.Logging"/>
+            <parameter-bindings>
+                <binding name="logPoint" value="03Validation"/>
+                <binding name="SrcID" value="${SrcID}"/>
+                <binding name="Broker" value="${Broker}"/>
+            </parameter-bindings>
+        </module-reference>
+        <box name="ValidationOutUnion" type="union">
+            <input port="1" stream="out:ValidationLog_1"/>
+            <input port="2" stream="out:ValidationLPSwitch_2"/>
+            <output port="1" stream="out:ValidationOutUnion_1"/>
+            <param name="strict" value="false"/>
+        </box>
+        <module-reference name="ConvertedData2Process">
+            <input name="DataIn" port="1" stream="out:ValidationOutUnion_1"/>
+            <output name="ProduceOut" port="1" stream="out:ConvertedData2Process_1"/>
+            <param name="file" value="com.iisigroup.iip.utility.DataBuffer"/>
+            <parameter-bindings>
+                <binding name="SrcID" value="${SrcID}"/>
+                <binding name="dataType" value="ready2Process"/>
+                <binding name="SnsrType"/>
+                <binding name="Broker" value="${Broker}"/>
+            </parameter-bindings>
+        </module-reference>
+    </add>
+</modify>
