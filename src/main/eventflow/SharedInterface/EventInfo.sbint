@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<application version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <annotations>
+        <annotation name="hygienic"/>
+    </annotations>
+    <type-metadata>
+        <param name="type" value="interface"/>
+        <param name="fully-qualified-name" value="SharedInterface.EventInfo"/>
+    </type-metadata>
+    <memory-model-settings/>
+    <named-schemas>
+        <schema name="convertedData">
+            <field name="CID" type="string"/>
+            <field name="lockStatus" type="bool"/>
+            <field name="SecurityStatus" type="bool"/>
+            <field name="indoorLight" type="bool"/>
+            <field name="DoorStatus" type="bool"/>
+            <field name="SpeedStatus" type="bool"/>
+            <field name="PowStatus" type="bool"/>
+            <field name="AccStatus" type="bool"/>
+            <field name="LowVolt" type="bool"/>
+            <field name="GPSTime" type="timestamp"/>
+        </schema>
+        <schema name="processedData">
+            <field name="CID" type="string"/>
+            <field name="lockStatus" type="bool"/>
+            <field name="SecurityStatus" type="bool"/>
+            <field name="indoorLight" type="bool"/>
+            <field name="DoorStatus" type="bool"/>
+            <field name="SpeedStatus" type="bool"/>
+            <field name="PowStatus" type="bool"/>
+            <field name="AccStatus" type="bool"/>
+            <field name="LowVolt" type="bool"/>
+            <field name="GPSTime" type="timestamp"/>
+        </schema>
+        <schema name="rawData">
+            <field name="para" type="tuple">
+                <schema>
+                    <field name="CID" type="string"/>
+                    <field name="lockStatus" type="int"/>
+                    <field name="SecurityStatus" type="int"/>
+                    <field name="indoorLight" type="int"/>
+                    <field name="DoorStatus" type="int"/>
+                    <field name="SpeedStatus" type="int"/>
+                    <field name="PowStatus" type="int"/>
+                    <field name="AccStatus" type="int"/>
+                    <field name="LowVolt" type="int"/>
+                    <field name="GPSTime" type="string"/>
+                </schema>
+            </field>
+        </schema>
+        <schema name="AdapterOut">
+            <parent-schemas>
+                <parent-schema name="rawData"/>
+            </parent-schemas>
+            <field name="UUID" type="string"/>
+            <field name="RcvTime" type="timestamp"/>
+        </schema>
+        <schema name="CVSOut">
+            <parent-schemas>
+                <parent-schema name="convertedData"/>
+            </parent-schemas>
+            <field name="UUID" type="string"/>
+            <field name="SrcID" type="string"/>
+            <field name="SnsrType" type="string"/>
+            <field name="SnsrID" type="string"/>
+        </schema>
+        <schema name="CapabilityOut">
+            <parent-schemas>
+                <parent-schema name="processedData"/>
+            </parent-schemas>
+            <field name="UUID" type="string"/>
+            <field name="SrcID" type="string"/>
+            <field name="SnsrType" type="string"/>
+            <field name="SnsrID" type="string"/>
+        </schema>
+    </named-schemas>
+    <dynamic-variables/>
+</application>

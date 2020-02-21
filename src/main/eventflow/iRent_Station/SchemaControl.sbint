@@ -5,7 +5,7 @@
     </annotations>
     <type-metadata>
         <param name="type" value="interface"/>
-        <param name="fully-qualified-name" value="Upd_Sta.SchemaControl"/>
+        <param name="fully-qualified-name" value="iRent_Station.SchemaControl"/>
     </type-metadata>
     <memory-model-settings/>
     <named-schemas>

@@ -6,11 +6,11 @@
         </annotations>
         <type-metadata>
             <param name="type" value="module"/>
-            <param name="fully-qualified-name" value="Upd_Sta.Converter_example"/>
+            <param name="fully-qualified-name" value="iRent_Station.Converter_example"/>
         </type-metadata>
         <memory-model-settings/>
-        <implements module-reference="Upd_Sta.SchemaControl"/>
-        <import from="Upd_Sta.SchemaControl"/>
+        <implements module-reference="iRent_Station.SchemaControl"/>
+        <import from="iRent_Station.SchemaControl"/>
         <parameter-definitions>
             <parameter default="SrcID" name="SrcID"/>
         </parameter-definitions>

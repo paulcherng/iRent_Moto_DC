@@ -6,24 +6,24 @@
         </annotations>
         <type-metadata>
             <param name="type" value="module"/>
-            <param name="fully-qualified-name" value="iRent_Station.Validation_example"/>
+            <param name="fully-qualified-name" value="EventInfo.Validation_example"/>
         </type-metadata>
         <memory-model-settings/>
-        <implements module-reference="iRent_Station.SchemaControl"/>
-        <import from="iRent_Station.SchemaControl"/>
+        <implements module-reference="SharedInterface.EventInfo"/>
+        <import from="SharedInterface.EventInfo"/>
         <dynamic-variables/>
         <data name="JDBCTable" type="jdbctable">
             <param name="connection" value="IIP"/>
         </data>
-        <stream name="ConvertedDataIn" schema="convertedData"/>
         <stream name="LoadRuleCommandIn">
             <schema>
                 <field name="reloadCommand" type="string"/>
                 <field name="unhandledField" type="capture" type-name="unhandledFieldType"/>
             </schema>
         </stream>
+        <stream name="ValidationInput" schema="CVSOut"/>
         <box name="Map" type="map">
-            <input port="1" stream="ConvertedDataIn"/>
+            <input port="1" stream="ValidationInput"/>
             <output port="1" stream="out:Map_1"/>
             <target-list>
                 <item name="input" selection="all"/>
@@ -64,7 +64,7 @@
         </box>
         <box name="Map2" type="map">
             <input port="1" stream="out:Filter_1"/>
-            <output port="1" stream="ValidatedDataOut"/>
+            <output port="1" stream="ValidationOutput"/>
             <target-list>
                 <item name="input" selection="all">
                     <remove field="Rule"/>
@@ -82,6 +82,6 @@
             </target-list>
         </box>
         <output-stream name="RuleListOut"/>
-        <output-stream name="ValidatedDataOut" schema="convertedData"/>
+        <output-stream name="ValidationOutput" schema="CVSOut"/>
     </add>
 </modify>

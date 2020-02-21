@@ -11,14 +11,16 @@
         <memory-model-settings/>
         <parameter-definitions>
             <parameter default="192.168.61.14:9092" name="Broker"/>
+            <parameter default="iRent_2.0" name="prefix"/>
         </parameter-definitions>
         <dynamic-variables/>
-        <module-reference name="iRent_Car">
-            <output name="LPflagConfig" port="1" stream="out:iRent_Car_1"/>
-            <param name="file" value="iRent_Car.DataConnect_Single"/>
+        <module-reference name="EventInfo_DC">
+            <output name="LPflagConfig" port="1" stream="out:EventInfo_DC_1"/>
+            <param name="parallel" value="true"/>
+            <param name="file" value="EventInfo.DataConnect_Single"/>
             <parameter-bindings>
-                <binding name="Broker" value="${Broker}"/>
-                <binding name="SrcID" value="iRent_Car"/>
+                <binding name="SrcID" value="EventInfo"/>
+                <binding name="prefix" value="${prefix}"/>
             </parameter-bindings>
         </module-reference>
         <module-reference disabled="true" name="iRent_Motocycle">
@@ -29,12 +31,33 @@
                 <binding name="Broker" value="${Broker}"/>
             </parameter-bindings>
         </module-reference>
-        <module-reference name="iRent_Station">
-            <output name="LPflagConfig" port="1" stream="out:iRent_Station_1"/>
+        <module-reference name="ReadCardInfo_DC">
+            <output name="LPflagConfig" port="1" stream="out:ReadCardInfo_DC_1"/>
+            <param name="parallel" value="true"/>
+            <param name="file" value="ReadCardInfo.DataConnect_Single"/>
+            <parameter-bindings>
+                <binding name="SrcID" value="ReadCardInfo"/>
+                <binding name="prefix" value="${prefix}"/>
+            </parameter-bindings>
+        </module-reference>
+        <module-reference name="ResponseInfo_DC">
+            <output name="LPflagConfig" port="1" stream="out:ResponseInfo_DC_1"/>
+            <param name="parallel" value="true"/>
+            <param name="file" value="iRent_Car.DataConnect_Single"/>
+            <parameter-bindings>
+                <binding name="Broker" value="${Broker}"/>
+                <binding name="SrcID" value="ResponseInfo"/>
+                <binding name="prefix" value="${prefix}"/>
+            </parameter-bindings>
+        </module-reference>
+        <module-reference name="Upd_Sta_DC">
+            <output name="LPflagConfig" port="1" stream="out:Upd_Sta_DC_1"/>
+            <param name="parallel" value="true"/>
             <param name="file" value="iRent_Station.DataConnect_Single"/>
             <parameter-bindings>
                 <binding name="Broker" value="${Broker}"/>
-                <binding name="SrcID" value="iRent_Station"/>
+                <binding name="SrcID" value="Upd_Sta"/>
+                <binding name="prefix" value="${prefix}"/>
             </parameter-bindings>
         </module-reference>
     </add>

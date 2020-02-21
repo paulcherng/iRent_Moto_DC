@@ -6,11 +6,11 @@
         </annotations>
         <type-metadata>
             <param name="type" value="module"/>
-            <param name="fully-qualified-name" value="ReponseInfo.Validation_example"/>
+            <param name="fully-qualified-name" value="iRent_Car.Validation_example"/>
         </type-metadata>
         <memory-model-settings/>
-        <implements module-reference="ReponseInfo.SchemaControl"/>
-        <import from="ReponseInfo.SchemaControl"/>
+        <implements module-reference="iRent_Car.SchemaControl"/>
+        <import from="iRent_Car.SchemaControl"/>
         <dynamic-variables/>
         <data name="JDBCTable" type="jdbctable">
             <param name="connection" value="IIP"/>

@@ -6,11 +6,11 @@
         </annotations>
         <type-metadata>
             <param name="type" value="module"/>
-            <param name="fully-qualified-name" value="iRent_Station.DataConnect_Single"/>
+            <param name="fully-qualified-name" value="EventInfo.DataConnect_Single"/>
         </type-metadata>
         <memory-model-settings/>
         <parameter-definitions>
-            <parameter default="Upd_Sta" name="SrcID"/>
+            <parameter default="SrcID" name="SrcID"/>
             <parameter default="192.168.61.14:9092" name="Broker"/>
             <parameter default="prefix" name="prefix"/>
         </parameter-definitions>
@@ -42,7 +42,7 @@
             <output name="FolderList" port="1" stream="out:Buffer2LocalFileraw_1"/>
             <output name="RootPathConfig" port="2" stream="out:Buffer2LocalFileraw_2"/>
             <output name="TimeFormatConfig" port="3" stream="out:Buffer2LocalFileraw_3"/>
-            <param name="file" value="iRent_Station.Buffer2LocalFile"/>
+            <param name="file" value="EventInfo.Buffer2LocalFile"/>
             <parameter-bindings>
                 <binding name="Broker" value="${Broker}"/>
                 <binding name="SrcID" value="${SrcID}"/>
@@ -94,7 +94,7 @@
             <input name="ReloadCommandIn" port="1" stream="out:ConfigOutUnion_1"/>
             <output name="OutputStream" port="1" stream="out:AdapterPart_1"/>
             <output name="RawDataOut" port="2" stream="out:AdapterPart_2"/>
-            <param name="file" value="iRent_Station.Adapter_example"/>
+            <param name="file" value="EventInfo.Adapter_example"/>
             <parameter-bindings>
                 <binding name="SrcID" value="${prefix}/${SrcID}"/>
             </parameter-bindings>
@@ -140,9 +140,9 @@
             <param name="output-count" value="2"/>
         </box>
         <module-reference name="ConverterPart">
-            <input name="RawDataIn" port="1" stream="out:Split_2"/>
-            <output name="ConvertedDataOut" port="1" stream="out:ConverterPart_1"/>
-            <param name="file" value="iRent_Station.Converter_example"/>
+            <input name="ConverterInput" port="1" stream="out:Split_2"/>
+            <output name="ConverterOutput" port="1" stream="out:ConverterPart_1"/>
+            <param name="file" value="EventInfo.Converter_example"/>
             <parameter-bindings>
                 <binding name="SrcID" value="${SrcID}"/>
             </parameter-bindings>
@@ -182,11 +182,11 @@
             <param name="strict" value="false"/>
         </box>
         <module-reference name="ValidationPart">
-            <input name="ConvertedDataIn" port="1" stream="out:ConverterOutUnion_1"/>
-            <input name="LoadRuleCommandIn" port="2" stream="out:Split2_1"/>
+            <input name="LoadRuleCommandIn" port="1" stream="out:Split2_1"/>
+            <input name="ValidationInput" port="2" stream="out:ConverterOutUnion_1"/>
             <output name="RuleListOut" port="1" stream="out:ValidationPart_1"/>
-            <output name="ValidatedDataOut" port="2" stream="out:ValidationPart_2"/>
-            <param name="file" value="iRent_Station.Validation_example"/>
+            <output name="ValidationOutput" port="2" stream="out:ValidationPart_2"/>
+            <param name="file" value="EventInfo.Validation_example"/>
         </module-reference>
         <box name="ValidationLPSwitch" type="filter">
             <input port="1" stream="out:ValidationPart_2"/>

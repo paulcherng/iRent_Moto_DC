@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<modify version="10.4.3_a45545bc0fa864b6dd457e084eb653f6e2004e05">
+    <add>
+        <annotations>
+            <annotation name="hygienic"/>
+        </annotations>
+        <type-metadata>
+            <param name="type" value="module"/>
+            <param name="fully-qualified-name" value="EventInfo.Converter_example"/>
+        </type-metadata>
+        <memory-model-settings/>
+        <implements module-reference="SharedInterface.EventInfo"/>
+        <import from="SharedInterface.EventInfo"/>
+        <parameter-definitions>
+            <parameter default="SrcID" name="SrcID"/>
+        </parameter-definitions>
+        <dynamic-variables/>
+        <stream name="ConverterInput" schema="AdapterOut"/>
+        <box name="Map2" type="map">
+            <input port="1" stream="ConverterInput"/>
+            <output port="1" stream="out:Map2_1"/>
+            <target-list>
+                <item name="input" selection="none">
+                    <include field="UUID"/>
+                </item>
+                <expressions>
+                    <include field="CID">para.CID</include>
+                    <include field="lockStatus">bool(para.lockStatus)</include>
+                    <include field="SecurityStatus">bool(para.SecurityStatus)</include>
+                    <include field="indoorLight">bool(para.indoorLight)</include>
+                    <include field="DoorStatus">bool(para.DoorStatus)</include>
+                    <include field="SpeedStatus">bool(para.SpeedStatus)</include>
+                    <include field="PowStatus">bool(para.PowStatus)</include>
+                    <include field="AccStatus">bool(para.AccStatus)</include>
+                    <include field="LowVolt">bool(para.LowVolt)</include>
+                    <include field="GPSTime">parse_time(para.GPSTime,"yyyy-MM-dd HH:mm:ss")</include>
+                </expressions>
+            </target-list>
+        </box>
+        <box name="Map" type="map">
+            <input port="1" stream="out:Map2_1"/>
+            <output port="1" stream="ConverterOutput"/>
+            <target-list>
+                <item name="input" selection="all"/>
+                <expressions>
+                    <include field="SrcID">"${SrcID}"</include>
+                    <include field="SnsrType">""</include>
+                    <include field="SnsrID">""</include>
+                </expressions>
+            </target-list>
+        </box>
+        <output-stream name="ConverterOutput" schema="CVSOut"/>
+    </add>
+</modify>
